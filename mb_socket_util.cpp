@@ -7,21 +7,29 @@
 
 #include "mb_socket_util.h"
 
+using namespace baselib;
+
 int SocketUtil::Setsockopt(int fd, int level, int optname, const void *optval, socklen_t optlen)
 {
 	int iRet;
 	if ((iRet = setsockopt(fd, level, optname, optval, optlen)) < 0)
 	{
 		err_sys("setsockopt error");
-		return FAIL;
+		return -1;
 	}
-	
-	return SUCC;
+	return 0;
 }
 
 int SocketUtil::SetSockNoblock(Socket &sock)
 {
 	int fd = sock.GetSocket();
+	int reUse = 1;
+	int iRet;
+	if ((iRet = Setsockopt( fd , SOL_SOCKET , SO_REUSEADDR , (char *)&reUse, sizeof(reUse))) == FAIL)
+	{
+		err_sys("setsockopt error");
+		return FAIL;
+	}
 	return SUCC;
 }
 
@@ -35,4 +43,5 @@ int SocketUtil::SetSockReUseAddr(Socket &sock)
 		err_sys("setsockopt error");
 		return FAIL;
 	}
+	return SUCC;
 }
