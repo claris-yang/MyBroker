@@ -9,7 +9,7 @@ using namespace baselib;
 
 int SocketService::StartService()
 {
-	if(Bind(9999) == FAIL)
+	if(Bind(9998) == FAIL)
 	{
 		return FAIL;	
 	}
